@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Timber</string>
+    <string name="app_name_full">Timber</string>
+
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="language">zh</string>
+
+    <string name="ui_loading">Loading photos⋯⋯</string>
+
+    <string name="ui_lang">en</string>
+
+    <string name="ui_okay">Okay</string>
+    <string name="ui_got_it">Got it</string>
+    <string name="ui_no">No</string>
+    <string name="ui_cancel">Cancel</string>
+    <string name="ui_share">Share</string>
+    <string name="ui_direction">Navigate to</string>
+    <string name="ui_error">Error</string>
+    <string name="ui_leave">Leave</string>
+    <string name="ui_fatal_error">Error occurs. Please report it to us.</string>
+    <string name="ui_sorry">Sorry</string>
+    <string name="ui_nvm">¯\\_(ツ)_/¯ Okay</string>
+    <string name="ui_report">Report</string>
+    <string name="ui_alert">Alert</string>
+    <string name="ui_download">Download</string>
+    <string name="ui_later">Please wait</string>
+    <string name="ui_upload">Upload</string>
+    <string name="ui_loading_message">Loading</string>
+    <string name="ui_take_photo">Take photo</string>
+    <string name="ui_help">Help</string>
+
+    <string name="pref_share_desc">Download Timber Android App \n\n</string>
+    <string name="pref_report_title">Timber Report</string>
+    <string name="pref_submit_title">Timber Submit Photo</string>
+
+    <string name="dialog_permission_denied_posbtn">Setting »</string>
+    <string name="dialog_permission_denied_message">Without granting permissions, it will probably not work.\n\nPlease give us the permissions to access this feature.</string>
+
+    <string-array name="tree_info_array">
+        <item>Address</item>
+        <item>Region</item>
+        <item>Coordinate</item>
+        <item>Species</item>
+        <item>Condition</item>
+        <item>Tree Register No.</item>
+        <item>Department Ref No.</item>
+        <item>OVT No.</item>
+        <item>Last Update</item>
+    </string-array>
+
+</resources>

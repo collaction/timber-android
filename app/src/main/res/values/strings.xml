@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Timber</string>
+    <string name="app_name_full">Timber</string>
+    <string name="collaction_full" translatable="false">Collaction</string>
+
+    <string name="title_activity_settings">設定</string>
+
+    <string name="language">zh</string>
+    <string name="action_language" translatable="false">Language</string>
+
+    <string-array name="language_choose" translatable="false">
+        <item>System Default</item>
+        <item>English</item>
+        <item>中文（正體）</item>
+    </string-array>
+
+    <string name="ui_loading">正在載入相片⋯⋯</string>
+
+    <string name="ui_lang">zh</string>
+
+    <string name="ui_okay">確定</string>
+    <string name="ui_got_it">好的</string>
+    <string name="ui_no">不了</string>
+    <string name="ui_cancel">取消</string>
+    <string name="ui_share">分享</string>
+    <string name="ui_direction">導航至此樹木</string>
+    <string name="ui_error">錯誤</string>
+    <string name="ui_leave">離開</string>
+    <string name="ui_fatal_error">發生不可預期的錯誤，請回報這個問題，感謝。</string>
+    <string name="ui_sorry">抱歉</string>
+    <string name="ui_nvm">¯\\_(ツ)_/¯ 好啦</string>
+    <string name="ui_report">回報問題</string>
+    <string name="ui_alert">注意</string>
+    <string name="ui_download">下載</string>
+    <string name="ui_later">稍後</string>
+    <string name="ui_upload">上傳</string>
+    <string name="ui_loading_message">載入中</string>
+    <string name="ui_take_photo">拍照</string>
+    <string name="ui_help">說明</string>
+
+    <string name="pref_share_desc">快下載「Timber」Android App！！\n\n</string>
+    <string name="pref_report_title">Timber 回報問題</string>
+    <string name="pref_submit_title">Timber 提交樹木樹皮相片</string>
+
+    <string name="dialog_permission_denied_posbtn">設定 »</string>
+    <string name="dialog_permission_denied_message">請給予應用程式相關權限，這樣才能使用功能。</string>
+
+    <string-array name="tree_info_array">
+        <item>位置</item>
+        <item>地區</item>
+        <item>坐標</item>
+        <item>品種</item>
+        <item>狀況</item>
+        <item>樹木登記冊編號</item>
+        <item>部門登記編號</item>
+        <item>古樹名木編號</item>
+        <item>資料最後更新</item>
+    </string-array>
+
+</resources>

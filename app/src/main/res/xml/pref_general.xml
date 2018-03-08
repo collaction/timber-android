@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="設定">
+
+    <PreferenceCategory android:title="一般">
+        <Preference
+            android:key="pref_language"
+            android:title="Language（語言）"/>
+
+        <Preference
+            android:key="pref_submit"
+            android:summary="全港有多達 440 棵古樹，我們誠邀大家一起拍攝古樹木樹皮相片，並傳送相片給我們處理。"
+            android:title="我可以如何參與此計劃？"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="關於">
+        <Preference
+            android:key="pref_rate"
+            android:title="給予評分"/>
+
+        <Preference
+            android:key="pref_share"
+            android:title="分享此程式"/>
+
+        <Preference
+            android:key="pref_author"
+            android:summary="查看其他 Collaction 小隊開發的程式。"
+            android:title="更多程式"/>
+
+        <Preference
+            android:key="pref_report"
+            android:summary="糟了，我們要找滅蟲公司。"
+            android:title="回報問題"/>
+
+        <Preference
+            android:key="pref_version"
+            android:summary="Collaction 小隊致力推動群眾外包在香港的發展，我們關心並投入持續開發社區共享、環保，開放資料等的社會創新項目。了解查看更多背後故事。"/>
+
+        <!--<Preference-->
+            <!--android:key="pref_version"-->
+            <!--android:summary="此程式為「Collaction Open Source」開源項目之一，並以 GPL 3.0 釋出原始碼；樹木照片以 CC BY-NC-SA 4.0 方式分享。"/>-->
+    </PreferenceCategory>
+</PreferenceScreen>
