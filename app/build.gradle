@@ -8,21 +8,20 @@ android {
         applicationId "hk.collaction.timber"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 160101
-        versionName "Ficus Microcarpa 101"
+        versionCode 160110
+        versionName "Ficus Microcarpa 110"
         multiDexEnabled true
+        resConfigs "en", "zh"
     }
     buildTypes {
         debug {
-            shrinkResources false
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "GOOGLE_API_KEY", "\"" + getSecretKey("GOOGLE_API_KEY") + "\""
             buildConfigField "String", "API_BASE_URL", "\"" + getSecretKey("API_BASE_URL_DEV") + "\""
         }
         release {
             shrinkResources true
             minifyEnabled true
+            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "GOOGLE_API_KEY", "\"" + getSecretKey("GOOGLE_API_KEY") + "\""
             buildConfigField "String", "API_BASE_URL", "\"" + getSecretKey("API_BASE_URL_RELEASE") + "\""
