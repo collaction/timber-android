@@ -75,7 +75,9 @@ public class TreeFragment extends BaseFragment {
 						LinearLayoutManager.VERTICAL, false)
 		);
 
-		treeId = getArguments().getInt("treeId");
+		if (getArguments() != null) {
+			treeId = getArguments().getInt("treeId");
+		}
 
 		TreeListWrapper wrapper = new TreeListWrapper();
 		wrapper.type = "all";
@@ -92,25 +94,25 @@ public class TreeFragment extends BaseFragment {
 				.enqueue(new MyCallback<TreeListResponse>(mContext) {
 					@Override
 					public void onResponse(Call<TreeListResponse> call, Response<TreeListResponse> response) {
-						if (mContextReference.get() == null) {
+						if (mActivityReference.get() == null) {
 							return;
 						}
 
-						if (response.isSuccessful()) {
+						if (response.isSuccessful() && response.body() != null) {
 							if (response.body().trees.size() > 0) {
 								mTree = response.body().trees.get(0);
 								init();
 							} else {
-								// error
+								C.errorDialog(mActivityReference.get(), "找不到樹木");
 							}
 						} else {
-							C.errorDialog(mContext, response);
+							C.errorDialog(mActivityReference.get(), response);
 						}
 					}
 
 					@Override
 					public void onFailure(Call<TreeListResponse> call, Throwable t) {
-						C.errorDialog(mContext, t);
+						C.errorDialog(mActivityReference.get(), t);
 					}
 				});
 	}

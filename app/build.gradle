@@ -8,8 +8,8 @@ android {
         applicationId "hk.collaction.timber"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 160110
-        versionName "Ficus Microcarpa 110"
+        versionCode 160120
+        versionName "Ficus Microcarpa 120"
         multiDexEnabled true
         resConfigs "en", "zh"
     }
@@ -53,45 +53,45 @@ repositories {
 dependencies {
 
     // Google Android Support
-    compile 'com.android.support:multidex:1.0.3'
-    compile 'com.android.support:appcompat-v7:27.1.0'
-    compile 'com.android.support:support-v13:27.1.0'
-    compile 'com.android.support:design:27.1.0'
-    compile 'com.android.support:cardview-v7:27.1.0'
-    compile 'com.android.support:recyclerview-v7:27.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:preference-v14:27.1.0'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support:preference-v14:27.1.1'
 
-    compile 'com.google.android.gms:play-services-maps:11.8.0'
-    compile 'com.google.android.gms:play-services-location:11.8.0'
-    compile 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.firebase:firebase-core:15.0.2'
 
     // Placeholder View
-    compile 'com.mindorks:placeholderview:0.7.1'
+    implementation 'com.mindorks:placeholderview:0.7.1'
 
     // RxBinding Butter Knife
-    compile 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Material Dialog
-    compile 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 
     // Glide
-    compile 'com.github.bumptech.glide:glide:4.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.6.1'
 
     // GSON
-    compile 'com.google.code.gson:gson:2.8.1'
+    implementation 'com.google.code.gson:gson:2.8.1'
 
     // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
 
     // Roboto TextView
-    compile 'com.github.johnkil.android-robototextview:robototextview:4.0.0'
+    implementation 'com.github.johnkil.android-robototextview:robototextview:4.0.0'
 
     // Crashlytics
-    compile('com.crashlytics.sdk.android:crashlytics:2.9.0@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.0@aar') {
         transitive = true
     }
 }

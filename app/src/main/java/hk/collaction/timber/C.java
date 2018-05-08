@@ -35,23 +35,23 @@ public class C extends Util {
 				.enqueue(new MyCallback<TreeListResponse>(mContext) {
 					@Override
 					public void onResponse(Call<TreeListResponse> call, Response<TreeListResponse> response) {
-						if (mContextReference.get() == null) {
+						if (mActivityReference.get() == null) {
 							return;
 						}
 
 						if (response.isSuccessful()) {
 							for (Tree tree : response.body().trees) {
-								mSwipeView.addView(new TreeCard(mContextReference.get(), tree, mSwipeView));
+								mSwipeView.addView(new TreeCard(mActivityReference.get(), tree, mSwipeView));
 							}
 
 						} else {
-							C.errorDialog(mContextReference.get(), response);
+							C.errorDialog(mActivityReference.get(), response);
 						}
 					}
 
 					@Override
 					public void onFailure(Call<TreeListResponse> call, Throwable t) {
-						C.errorDialog(mContextReference.get(), t);
+						C.errorDialog(mActivityReference.get(), t);
 					}
 				});
 	}
