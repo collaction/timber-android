@@ -7,7 +7,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-public interface BaseApi {
+public interface SimpleApiClient {
 
 	@GET("api_get_tree_list")
 	Call<TreeListResponse> getTreeList(

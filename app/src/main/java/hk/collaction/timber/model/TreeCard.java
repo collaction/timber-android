@@ -21,10 +21,13 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 
 import hk.collaction.timber.C;
 import hk.collaction.timber.R;
-import hk.collaction.timber.rest.model.MyCallback;
+import hk.collaction.timber.rest.model.BaseCallback;
+import hk.collaction.timber.rest.model.request.TreeListWrapper;
 import hk.collaction.timber.rest.model.response.LikeTreeResponse;
-import hk.collaction.timber.rest.service.ApiClient;
+import hk.collaction.timber.rest.model.response.TreeListResponse;
+import hk.collaction.timber.rest.service.BaseApiClient;
 import hk.collaction.timber.ui.activity.TreeActivity;
+import hk.collaction.timber.ui.view.TreeSwipeView;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -45,9 +48,9 @@ public class TreeCard {
 
 	private Tree mTree;
 	private Context mContext;
-	private SwipePlaceHolderView mSwipeView;
+	private TreeSwipeView mSwipeView;
 
-	public TreeCard(Context context, Tree tree, SwipePlaceHolderView swipeView) {
+	public TreeCard(Context context, Tree tree, TreeSwipeView swipeView) {
 		mContext = context;
 		mTree = tree;
 		mSwipeView = swipeView;
@@ -66,7 +69,7 @@ public class TreeCard {
 			@Override
 			public void onClick(android.view.View v) {
 				Intent intent = new Intent(mContext, TreeActivity.class);
-				intent.putExtra("treeId", mTree.getId());
+				intent.putExtra(C.ARG_TREE_ID, mTree.getId());
 				mContext.startActivity(intent);
 			}
 		});
@@ -74,25 +77,21 @@ public class TreeCard {
 
 	@SwipeOut
 	private void onSwipedOut() {
-//		Log.d("EVENT", "onSwipedOut" + mSwipeView.getChildCount());
 		if (mSwipeView.getChildCount() == 1) {
-			C.loadTimberList(mContext, mSwipeView);
+			mSwipeView.loadTimberList();
 		}
 	}
 
 	@SwipeCancelState
 	private void onSwipeCancelState() {
-//		Log.d("EVENT", "onSwipeCancelState");
 	}
 
 	@SwipeIn
 	private void onSwipeIn() {
-//		Log.d("EVENT", "onSwipedIn" + mSwipeView.getChildCount());
-
-		new ApiClient()
+		new BaseApiClient()
 				.getApiClient()
 				.likeTree(mTree.getId())
-				.enqueue(new MyCallback<LikeTreeResponse>(mContext) {
+				.enqueue(new BaseCallback<LikeTreeResponse>(mContext) {
 					@Override
 					public void onResponse(Call<LikeTreeResponse> call, Response<LikeTreeResponse> response) {
 					}
@@ -103,17 +102,15 @@ public class TreeCard {
 				});
 
 		if (mSwipeView.getChildCount() == 1) {
-			C.loadTimberList(mContext, mSwipeView);
+			mSwipeView.loadTimberList();
 		}
 	}
 
 	@SwipeInState
 	private void onSwipeInState() {
-//		Log.d("EVENT", "onSwipeInState");
 	}
 
 	@SwipeOutState
 	private void onSwipeOutState() {
-//		Log.d("EVENT", "onSwipeOutState");
 	}
 }

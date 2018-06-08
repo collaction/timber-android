@@ -1,6 +1,5 @@
 package hk.collaction.timber.rest.model;
 
-import android.app.Activity;
 import android.content.Context;
 
 import java.lang.ref.WeakReference;
@@ -13,16 +12,11 @@ import retrofit2.Response;
 /**
  * Created by himphen on 18/5/16.
  */
-public class MyCallback<BaseResponse> implements Callback<BaseResponse> {
+public class BaseCallback<BaseResponse> implements Callback<BaseResponse> {
 
-	public WeakReference<Activity> mActivityReference;
 	public WeakReference<Context> mContextReference;
 
-	public MyCallback(Activity activity) {
-		mActivityReference = new WeakReference<>(activity);
-	}
-
-	public MyCallback(Context context) {
+	public BaseCallback(Context context) {
 		mContextReference = new WeakReference<>(context);
 	}
 

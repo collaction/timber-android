@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,10 +31,10 @@ import hk.collaction.timber.C;
 import hk.collaction.timber.R;
 import hk.collaction.timber.model.InfoItem;
 import hk.collaction.timber.model.Tree;
-import hk.collaction.timber.rest.model.MyCallback;
+import hk.collaction.timber.rest.model.BaseCallback;
 import hk.collaction.timber.rest.model.request.TreeListWrapper;
 import hk.collaction.timber.rest.model.response.TreeListResponse;
-import hk.collaction.timber.rest.service.ApiClient;
+import hk.collaction.timber.rest.service.BaseApiClient;
 import hk.collaction.timber.ui.adapter.InfoItemAdapter;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -50,10 +51,8 @@ public class TreeFragment extends BaseFragment {
 	private Integer treeId;
 	private Tree mTree = null;
 
-	public static TreeFragment newInstance(Integer treeId) {
-		TreeFragment fragment = new TreeFragment();
-		Bundle args = new Bundle();
-		args.putInt("treeId", treeId);
+	public static Fragment newInstance(Bundle args) {
+		Fragment fragment = new TreeFragment();
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -84,17 +83,17 @@ public class TreeFragment extends BaseFragment {
 		wrapper.lang = getString(R.string.ui_lang);
 		wrapper.treeId = treeId;
 
-		new ApiClient()
+		new BaseApiClient()
 				.getApiClient()
 				.getTreeList(
 						wrapper.type,
 						wrapper.lang,
 						wrapper.treeId
 				)
-				.enqueue(new MyCallback<TreeListResponse>(mContext) {
+				.enqueue(new BaseCallback<TreeListResponse>(mContext) {
 					@Override
 					public void onResponse(Call<TreeListResponse> call, Response<TreeListResponse> response) {
-						if (mActivityReference.get() == null) {
+						if (mContextReference.get() == null) {
 							return;
 						}
 
@@ -103,16 +102,16 @@ public class TreeFragment extends BaseFragment {
 								mTree = response.body().trees.get(0);
 								init();
 							} else {
-								C.errorDialog(mActivityReference.get(), "找不到樹木");
+								C.errorDialog(mContextReference.get(), "找不到樹木");
 							}
 						} else {
-							C.errorDialog(mActivityReference.get(), response);
+							C.errorDialog(mContextReference.get(), response);
 						}
 					}
 
 					@Override
 					public void onFailure(Call<TreeListResponse> call, Throwable t) {
-						C.errorDialog(mActivityReference.get(), t);
+						C.errorDialog(mContextReference.get(), t);
 					}
 				});
 	}

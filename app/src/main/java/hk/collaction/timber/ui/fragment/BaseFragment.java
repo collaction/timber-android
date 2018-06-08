@@ -16,7 +16,6 @@ public class BaseFragment extends Fragment {
 
 	protected Activity mContext;
 	protected MaterialDialog progressDialog;
-	protected final int PERMISSION_REQUEST_CODE = 100;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

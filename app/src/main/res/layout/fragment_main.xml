@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- Must need -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,7 +27,7 @@
                 android:textColor="@color/grey600"
                 android:textSize="22sp"/>
 
-            <com.mindorks.placeholderview.SwipePlaceHolderView
+            <hk.collaction.timber.ui.view.TreeSwipeView
                 android:id="@+id/swipeView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -42,21 +45,34 @@
                 android:id="@+id/rejectBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/ic_cancel"/>
+                android:layout_marginEnd="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/ic_cancel"
+                android:contentDescription="Cancel"/>
 
             <ImageButton
                 android:id="@+id/settingsBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginLeft="30dp"
-                android:background="@drawable/ic_settings"/>
+                android:layout_marginEnd="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/ic_settings"
+                android:contentDescription="Settings"/>
 
             <ImageButton
                 android:id="@+id/acceptBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginLeft="30dp"
-                android:background="@drawable/ic_heart"/>
+                android:layout_marginEnd="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/ic_heart"
+                android:contentDescription="Heart"/>
         </LinearLayout>
     </FrameLayout>
 

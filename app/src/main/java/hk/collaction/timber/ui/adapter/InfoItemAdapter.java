@@ -28,6 +28,7 @@ public class InfoItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 		this.mOrientation = orientation;
 	}
 
+	@NonNull
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		Context context = parent.getContext();

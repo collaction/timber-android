@@ -1,4 +1,4 @@
-package hk.collaction.timber;
+package hk.collaction.timber.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,11 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -24,12 +20,13 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Locale;
 
+import hk.collaction.timber.R;
+
 /**
- * Util Class
+ * UtilHelper Class
  * Created by Himphen on 10/1/2016.
  */
-@SuppressWarnings("unused")
-public class Util {
+public class UtilHelper {
 
 	public static final String PREF_IAP = "iap";
 	public static final String PREF_LANGUAGE = "PREF_LANGUAGE";
@@ -57,27 +54,6 @@ public class Util {
 		}
 	}
 
-	public static Bitmap drawableToBitmap(Drawable drawable) {
-		if (drawable instanceof BitmapDrawable) {
-			return ((BitmapDrawable) drawable).getBitmap();
-		}
-
-		final int width = !drawable.getBounds().isEmpty() ? drawable
-				.getBounds().width() : drawable.getIntrinsicWidth();
-
-		final int height = !drawable.getBounds().isEmpty() ? drawable
-				.getBounds().height() : drawable.getIntrinsicHeight();
-
-		final Bitmap bitmap = Bitmap.createBitmap(width <= 0 ? 1 : width,
-				height <= 0 ? 1 : height, Bitmap.Config.ARGB_8888);
-
-		Canvas canvas = new Canvas(bitmap);
-		drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-		drawable.draw(canvas);
-
-		return bitmap;
-	}
-
 	public static double round(double value, int places) {
 		if (places < 0) throw new IllegalArgumentException();
 
@@ -100,7 +76,7 @@ public class Util {
 	public static void detectLanguage(Context context) {
 		SharedPreferences setting = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		String language = setting.getString(Util.PREF_LANGUAGE, "auto");
+		String language = setting.getString(UtilHelper.PREF_LANGUAGE, "auto");
 		Resources res = context.getResources();
 		Configuration conf = res.getConfiguration();
 		switch (language) {
@@ -121,36 +97,6 @@ public class Util {
 		}
 		DisplayMetrics dm = res.getDisplayMetrics();
 		res.updateConfiguration(conf, dm);
-	}
-
-	public static boolean isTablet(Context context) {
-		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-	}
-
-	/**
-	 * This method converts dp unit to equivalent pixels, depending on device density.
-	 *
-	 * @param dp      A value in dp (density independent pixels) unit. Which we need to convert into pixels
-	 * @param context Context to get resources and device specific display metrics
-	 * @return A float value to represent px equivalent to dp depending on device density
-	 */
-	public static float convertDpToPixel(float dp, Context context) {
-		Resources resources = context.getResources();
-		DisplayMetrics metrics = resources.getDisplayMetrics();
-		return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-	}
-
-	/**
-	 * This method converts device specific pixels to density independent pixels.
-	 *
-	 * @param px      A value in px (pixels) unit. Which we need to convert into db
-	 * @param context Context to get resources and device specific display metrics
-	 * @return A float value to represent dp equivalent to px value
-	 */
-	public static float convertPixelsToDp(float px, Context context) {
-		Resources resources = context.getResources();
-		DisplayMetrics metrics = resources.getDisplayMetrics();
-		return px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
 	}
 
 	@SuppressWarnings("deprecation")

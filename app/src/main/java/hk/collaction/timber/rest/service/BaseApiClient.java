@@ -6,14 +6,14 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiClient {
+public class BaseApiClient {
 	private static final ApiConfig API_CONFIG = ApiConfig.BASE_URL;
 
-	private final BaseApi restClient;
+	private final SimpleApiClient restClient;
 
 	private static String ROOT = API_CONFIG.getGateway();
 
-	public ApiClient() {
+	public BaseApiClient() {
 		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
 		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -31,10 +31,10 @@ public class ApiClient {
 				.client(okHttpClient)
 				.build();
 
-		restClient = retrofit.create(BaseApi.class);
+		restClient = retrofit.create(SimpleApiClient.class);
 	}
 
-	public BaseApi getApiClient() {
+	public SimpleApiClient getApiClient() {
 		return restClient;
 	}
 }

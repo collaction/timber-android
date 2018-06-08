@@ -10,17 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.blankj.utilcode.util.SizeUtils;
 import com.mindorks.placeholderview.SwipeDecor;
-import com.mindorks.placeholderview.SwipePlaceHolderView;
-import com.mindorks.placeholderview.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import hk.collaction.timber.C;
 import hk.collaction.timber.R;
-import hk.collaction.timber.Util;
+import hk.collaction.timber.helper.UtilHelper;
 import hk.collaction.timber.ui.activity.SettingsActivity;
+import hk.collaction.timber.ui.view.TreeSwipeView;
 
 /**
  * Created by himphen on 21/5/16.
@@ -33,7 +32,7 @@ public class MainFragment extends BaseFragment {
 	ImageButton acceptBtn;
 
 	@BindView(R.id.swipeView)
-	SwipePlaceHolderView mSwipeView;
+	TreeSwipeView mSwipeView;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -47,8 +46,8 @@ public class MainFragment extends BaseFragment {
 	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		int bottomMargin = Utils.dpToPx(160);
-		Point windowSize = Util.getDisplaySize(mContext.getWindowManager());
+		int bottomMargin = SizeUtils.dp2px(160);
+		Point windowSize = UtilHelper.getDisplaySize(mContext.getWindowManager());
 
 		mSwipeView.getBuilder()
 				.setDisplayViewCount(5)
@@ -60,21 +59,20 @@ public class MainFragment extends BaseFragment {
 						.setSwipeOutMsgLayoutId(R.layout.tree_swipe_out_msg_view)
 						.setRelativeScale(0.01f));
 
-		C.loadTimberList(mContext, mSwipeView);
-
 		rejectBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mSwipeView.doSwipe(false);
 			}
 		});
-
 		acceptBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mSwipeView.doSwipe(true);
 			}
 		});
+
+		mSwipeView.loadTimberList();
 	}
 
 	@OnClick(R.id.settingsBtn)
