@@ -5,11 +5,7 @@
     <string name="app_name_full">Timber</string>
 
     <string name="title_activity_settings">Settings</string>
-
-    <string name="language">zh</string>
-
     <string name="ui_loading">Loading photos⋯⋯</string>
-
     <string name="ui_lang">en</string>
 
     <string name="ui_okay">Okay</string>

@@ -34,6 +34,10 @@ public class MainFragment extends BaseFragment {
 	@BindView(R.id.swipeView)
 	TreeSwipeView mSwipeView;
 
+	public static MainFragment newInstance() {
+		return new MainFragment();
+	}
+
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {

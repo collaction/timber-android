@@ -1,6 +1,5 @@
 package hk.collaction.timber.ui.activity;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,14 +16,6 @@ public class TreeActivity extends BaseActivity {
 
 	@BindView(R.id.toolbar)
 	Toolbar toolbar;
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		ActionBar ab = initActionBar(getSupportActionBar(), R.string.app_name);
-		ab.setDisplayHomeAsUpEnabled(false);
-		ab.setHomeButtonEnabled(false);
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

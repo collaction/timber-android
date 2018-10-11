@@ -2,17 +2,18 @@ package hk.collaction.timber.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
+
+import com.akexorcist.localizationactivity.ui.LocalizationActivity;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -26,11 +27,14 @@ import hk.collaction.timber.R;
  * UtilHelper Class
  * Created by Himphen on 10/1/2016.
  */
+@SuppressWarnings("unused")
 public class UtilHelper {
 
 	public static final String PREF_IAP = "iap";
 	public static final String PREF_LANGUAGE = "PREF_LANGUAGE";
+	public static final String PREF_LANGUAGE_COUNTRY = "PREF_LANGUAGE_COUNTRY";
 
+	@SuppressWarnings("JavaReflectionMemberAccess")
 	public static void forceShowMenu(Context mContext) {
 		try {
 			ViewConfiguration config = ViewConfiguration.get(mContext);
@@ -41,16 +45,6 @@ public class UtilHelper {
 				menuKeyField.setBoolean(config, false);
 			}
 		} catch (Exception ignored) {
-		}
-	}
-
-	public static String getCurrentVersionName(Context c) {
-		try {
-			PackageInfo pInfo = c.getPackageManager().getPackageInfo(
-					c.getPackageName(), 0);
-			return pInfo.versionName;
-		} catch (PackageManager.NameNotFoundException e) {
-			return "NA";
 		}
 	}
 
@@ -68,56 +62,53 @@ public class UtilHelper {
 		return bigDecimal.toPlainString();
 	}
 
-	public static String getCurrentLanguage(Context context) {
-		return context.getString(R.string.language);
+	public static String getCurrentLanguage(Context mContext) {
+		return mContext.getString(R.string.ui_lang);
 	}
 
-	@SuppressWarnings("deprecation")
-	public static void detectLanguage(Context context) {
-		SharedPreferences setting = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		String language = setting.getString(UtilHelper.PREF_LANGUAGE, "auto");
-		Resources res = context.getResources();
-		Configuration conf = res.getConfiguration();
-		switch (language) {
-			case "en":
-			case "zh":
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-					conf.setLocale(new Locale(language));
-				} else {
-					conf.locale = new Locale(language);
-				}
-				break;
-			default:
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-					conf.setLocale(Resources.getSystem().getConfiguration().getLocales().get(0));
-				} else {
-					conf.locale = Resources.getSystem().getConfiguration().locale;
-				}
+	public static void detectLanguage(Context mContext) {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+		String language = preferences.getString(UtilHelper.PREF_LANGUAGE, "");
+		String languageCountry = preferences.getString(UtilHelper.PREF_LANGUAGE_COUNTRY, "");
+
+		if (language.equals("")) {
+			Locale locale;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+				locale = Resources.getSystem().getConfiguration().getLocales().get(0);
+			} else {
+				locale = Resources.getSystem().getConfiguration().locale;
+			}
+			language = locale.getLanguage();
+			languageCountry = locale.getCountry();
 		}
-		DisplayMetrics dm = res.getDisplayMetrics();
-		res.updateConfiguration(conf, dm);
-	}
 
-	@SuppressWarnings("deprecation")
-	public static int getColor(int resId, Context context) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			return context.getColor(resId);
+		if (mContext instanceof LocalizationActivity) {
+			((LocalizationActivity) mContext).setLanguage(new Locale(language, languageCountry));
 		} else {
-			return context.getResources().getColor(resId);
+			Resources res = mContext.getResources();
+			Configuration conf = res.getConfiguration();
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+				conf.setLocale(new Locale(language, languageCountry));
+			} else {
+				conf.locale = new Locale(language, languageCountry);
+			}
+
+			DisplayMetrics dm = res.getDisplayMetrics();
+			res.updateConfiguration(conf, dm);
 		}
+	}
+
+	public static int getColor(Context mContext, int resId) {
+		return ContextCompat.getColor(mContext, resId);
 	}
 
 	public static Point getDisplaySize(WindowManager windowManager) {
 		try {
-			if (Build.VERSION.SDK_INT > 16) {
-				Display display = windowManager.getDefaultDisplay();
-				DisplayMetrics displayMetrics = new DisplayMetrics();
-				display.getMetrics(displayMetrics);
-				return new Point(displayMetrics.widthPixels, displayMetrics.heightPixels);
-			} else {
-				return new Point(0, 0);
-			}
+			Display display = windowManager.getDefaultDisplay();
+			DisplayMetrics displayMetrics = new DisplayMetrics();
+			display.getMetrics(displayMetrics);
+			return new Point(displayMetrics.widthPixels, displayMetrics.heightPixels);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Point(0, 0);

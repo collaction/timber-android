@@ -1,23 +1,33 @@
 package hk.collaction.timber.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import com.akexorcist.localizationactivity.ui.LocalizationActivity;
 
 import hk.collaction.timber.C;
 
 
-public class BaseActivity extends AppCompatActivity {
+@SuppressLint("Registered")
+public class BaseActivity extends LocalizationActivity {
 
 	protected Activity mContext;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		C.detectLanguage(this);
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		C.detectLanguage(mContext);
 	}
 
 	@Override

@@ -7,7 +7,6 @@
 
     <string name="title_activity_settings">設定</string>
 
-    <string name="language">zh</string>
     <string name="action_language" translatable="false">Language</string>
 
     <string-array name="language_choose" translatable="false">

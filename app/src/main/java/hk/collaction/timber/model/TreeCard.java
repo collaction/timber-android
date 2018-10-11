@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
-import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.Resolve;
 import com.mindorks.placeholderview.annotations.View;
@@ -19,12 +19,12 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 
+import java.util.Random;
+
 import hk.collaction.timber.C;
 import hk.collaction.timber.R;
 import hk.collaction.timber.rest.model.BaseCallback;
-import hk.collaction.timber.rest.model.request.TreeListWrapper;
 import hk.collaction.timber.rest.model.response.LikeTreeResponse;
-import hk.collaction.timber.rest.model.response.TreeListResponse;
 import hk.collaction.timber.rest.service.BaseApiClient;
 import hk.collaction.timber.ui.activity.TreeActivity;
 import hk.collaction.timber.ui.view.TreeSwipeView;
@@ -61,7 +61,9 @@ public class TreeCard {
 		Glide.with(mContext)
 				.load(mTree.getPhotoPath().getOriginal())
 				.apply(new RequestOptions()
+						.placeholder(getPlaceholderImageId())
 						.diskCacheStrategy(DiskCacheStrategy.ALL))
+				.transition(DrawableTransitionOptions.withCrossFade())
 				.into(profileImageView);
 		nameAgeTxt.setText(mTree.getName());
 
@@ -73,6 +75,17 @@ public class TreeCard {
 				mContext.startActivity(intent);
 			}
 		});
+	}
+
+	private Integer getPlaceholderImageId() {
+		switch (new Random().nextInt(3)) {
+			case 0:
+				return R.drawable.placeholder_1;
+			case 1:
+				return R.drawable.placeholder_2;
+			default:
+				return R.drawable.placeholder_3;
+		}
 	}
 
 	@SwipeOut

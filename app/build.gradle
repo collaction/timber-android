@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "hk.collaction.timber"
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 161310 // 0 = alpha, 1 = beta, 2 = release
-        versionName "Ficus Microcarpa 131a"
+        minSdkVersion 17
+        targetSdkVersion 28
+        versionCode 161402 // 0 = alpha, 1 = beta, 2 = release
+        versionName "Ficus Microcarpa 140"
         multiDexEnabled true
         resConfigs "en", "zh"
     }
@@ -59,17 +59,17 @@ dependencies {
 
     // Google Android Support
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-v13:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
-    implementation 'com.android.support:preference-v14:27.1.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:support-v13:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:preference-v14:28.0.0'
 
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.3'
 
     // Placeholder View
     implementation 'com.mindorks:placeholderview:0.7.1'
@@ -82,10 +82,10 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
 
     // GSON
-    implementation 'com.google.code.gson:gson:2.8.1'
+    implementation 'com.google.code.gson:gson:2.8.2'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -101,7 +101,10 @@ dependencies {
     }
 
     // https://github.com/Blankj/AndroidUtilCode
-    implementation 'com.blankj:utilcode:1.16.3'
+    implementation 'com.blankj:utilcode:1.20.4'
+
+    // https://github.com/akexorcist/Android-LocalizationActivity
+    implementation 'com.akexorcist:localizationactivity:1.2.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -8,25 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hk.collaction.timber.R;
-import hk.collaction.timber.model.InfoItem;
+import hk.collaction.timber.model.TreeInfoItem;
 
 /**
  * Created by himphen on 25/5/16.
  */
-public class InfoItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TreeInfoItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-	private List<InfoItem> mDataList;
+	private List<TreeInfoItem> mDataList = new ArrayList<>();
 	private String mOrientation;
-
-	public InfoItemAdapter(List<InfoItem> mDataList, String orientation) {
-		this.mDataList = mDataList;
-		this.mOrientation = orientation;
-	}
 
 	@NonNull
 	@Override
@@ -35,7 +31,7 @@ public class InfoItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 		View itemView;
 
-		if (mOrientation.equals("horizontal")) {
+		if ("horizontal".equals(mOrientation)) {
 			itemView = LayoutInflater.from(context).inflate(R.layout.list_item_info_horizontal, parent, false);
 		} else {
 			itemView = LayoutInflater.from(context).inflate(R.layout.list_item_info, parent, false);
@@ -46,23 +42,29 @@ public class InfoItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 	@Override
 	public void onBindViewHolder(@NonNull RecyclerView.ViewHolder rawHolder, int position) {
-		InfoItem item = mDataList.get(position);
+		TreeInfoItem item = mDataList.get(position);
 		ItemViewHolder holder = (ItemViewHolder) rawHolder;
 
 		holder.titleTv.setText(item.getTitleText());
 		holder.contentTv.setText(item.getContentText());
 	}
 
+	public void setData(List<TreeInfoItem> mDataList, String orientation) {
+		this.mDataList = mDataList;
+		this.mOrientation = orientation;
+
+		notifyDataSetChanged();
+	}
+
 	@Override
 	public int getItemCount() {
-		return mDataList == null ? 0 : mDataList.size();
+		return mDataList.size();
 	}
 
 	static class ItemViewHolder extends RecyclerView.ViewHolder {
-
-		@BindView(R.id.text1)
+		@BindView(R.id.titleTv)
 		TextView titleTv;
-		@BindView(R.id.text2)
+		@BindView(R.id.contentTv)
 		TextView contentTv;
 
 		ItemViewHolder(View itemView) {

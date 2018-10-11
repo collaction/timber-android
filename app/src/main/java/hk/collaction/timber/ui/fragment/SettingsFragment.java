@@ -11,6 +11,7 @@ import android.support.v7.preference.Preference;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.blankj.utilcode.util.AppUtils;
 
 import hk.collaction.timber.C;
 import hk.collaction.timber.R;
@@ -19,13 +20,17 @@ import hk.collaction.timber.ui.activity.SettingsActivity;
 
 public class SettingsFragment extends BasePreferenceFragment {
 
-	private SharedPreferences settings;
+	private SharedPreferences preferences;
+
+	public static SettingsFragment newInstance() {
+		return new SettingsFragment();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.pref_general);
-		settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+		preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 	}
 
 	@Override
@@ -35,18 +40,14 @@ public class SettingsFragment extends BasePreferenceFragment {
 		findPreference("pref_language").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				String language = settings.getString(C.PREF_LANGUAGE, "auto");
+				String language = preferences.getString(C.PREF_LANGUAGE, "");
+				String languageCountry = preferences.getString(C.PREF_LANGUAGE_COUNTRY, "");
 				int a = 0;
-				switch (language) {
-					case "auto":
-						a = 0;
-						break;
-					case "en":
-						a = 1;
-						break;
-					case "zh":
-						a = 2;
-						break;
+
+				if ("en".equals(language)) {
+					a = 1;
+				} else if ("zh".equals(language)) {
+					a = 2;
 				}
 
 				MaterialDialog.Builder dialog = new MaterialDialog.Builder(mContext)
@@ -55,17 +56,22 @@ public class SettingsFragment extends BasePreferenceFragment {
 						.itemsCallbackSingleChoice(a, new MaterialDialog.ListCallbackSingleChoice() {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+								SharedPreferences.Editor editor = preferences.edit();
 								switch (which) {
-									case 0:
-										settings.edit().putString(C.PREF_LANGUAGE, "auto").apply();
-										break;
 									case 1:
-										settings.edit().putString(C.PREF_LANGUAGE, "en").apply();
+										editor.putString(C.PREF_LANGUAGE, "en")
+												.putString(C.PREF_LANGUAGE_COUNTRY, "");
 										break;
 									case 2:
-										settings.edit().putString(C.PREF_LANGUAGE, "zh").apply();
+										editor.putString(C.PREF_LANGUAGE, "zh")
+												.putString(C.PREF_LANGUAGE_COUNTRY, "");
+										break;
+									default:
+										editor.putString(C.PREF_LANGUAGE, "")
+												.putString(C.PREF_LANGUAGE_COUNTRY, "");
 										break;
 								}
+								editor.apply();
 								startActivity(new Intent(mContext, SettingsActivity.class));
 								mContext.finish();
 								return false;
@@ -83,7 +89,7 @@ public class SettingsFragment extends BasePreferenceFragment {
 			public boolean onPreferenceClick(Preference preference) {
 				String meta = "Android Version: " + Build.VERSION.RELEASE + "\n";
 				meta += "SDK Level: " + Build.VERSION.SDK_INT + "\n";
-				meta += "Version: " + C.getCurrentVersionName(mContext) + "\n";
+				meta += "Version: " + AppUtils.getAppVersionName() + "\n";
 				meta += "Brand: " + Build.BRAND + "\n";
 				meta += "Model: " + Build.MODEL + "\n";
 
@@ -141,7 +147,7 @@ public class SettingsFragment extends BasePreferenceFragment {
 			}
 		});
 
-		findPreference("pref_version").setTitle("Version " + C.getCurrentVersionName(mContext));
+		findPreference("pref_version").setTitle("Version " + AppUtils.getAppVersionName());
 
 		findPreference("pref_version").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override

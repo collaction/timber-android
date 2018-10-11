@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 
 import hk.collaction.timber.C;
-import hk.collaction.timber.R;
 import hk.collaction.timber.model.Tree;
 import hk.collaction.timber.model.TreeCard;
 import hk.collaction.timber.rest.model.BaseCallback;
@@ -39,16 +38,10 @@ public class TreeSwipeView extends SwipePlaceHolderView {
 		mContext = context;
 	}
 
-	public TreeSwipeView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-		mTreeSwipeView = this;
-		mContext = context;
-	}
-
 	public void loadTimberList() {
 		TreeListWrapper wrapper = new TreeListWrapper();
 		wrapper.type = "basic";
-		wrapper.lang = mContext.getString(R.string.ui_lang);
+		wrapper.lang = C.getCurrentLanguage(mContext);
 
 		new BaseApiClient()
 				.getApiClient()

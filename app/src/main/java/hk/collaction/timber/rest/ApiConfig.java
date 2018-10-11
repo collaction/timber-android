@@ -6,7 +6,6 @@ public enum ApiConfig {
 
 	// DEVELOPMENT
 	BASE_URL(BuildConfig.API_BASE_URL, true);
-	public static final String SERVER_CONNECTION = "D";
 
 	private final String gateway;
 	private final boolean isDev;

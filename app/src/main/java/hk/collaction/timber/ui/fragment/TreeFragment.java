@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,13 +30,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hk.collaction.timber.C;
 import hk.collaction.timber.R;
-import hk.collaction.timber.model.InfoItem;
 import hk.collaction.timber.model.Tree;
+import hk.collaction.timber.model.TreeInfoItem;
 import hk.collaction.timber.rest.model.BaseCallback;
 import hk.collaction.timber.rest.model.request.TreeListWrapper;
 import hk.collaction.timber.rest.model.response.TreeListResponse;
 import hk.collaction.timber.rest.service.BaseApiClient;
-import hk.collaction.timber.ui.adapter.InfoItemAdapter;
+import hk.collaction.timber.ui.adapter.TreeInfoItemAdapter;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -51,8 +52,8 @@ public class TreeFragment extends BaseFragment {
 	private Integer treeId;
 	private Tree mTree = null;
 
-	public static Fragment newInstance(Bundle args) {
-		Fragment fragment = new TreeFragment();
+	public static TreeFragment newInstance(Bundle args) {
+		TreeFragment fragment = new TreeFragment();
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -80,7 +81,7 @@ public class TreeFragment extends BaseFragment {
 
 		TreeListWrapper wrapper = new TreeListWrapper();
 		wrapper.type = "all";
-		wrapper.lang = getString(R.string.ui_lang);
+		wrapper.lang = C.getCurrentLanguage(mContext);
 		wrapper.treeId = treeId;
 
 		new BaseApiClient()
@@ -93,7 +94,7 @@ public class TreeFragment extends BaseFragment {
 				.enqueue(new BaseCallback<TreeListResponse>(mContext) {
 					@Override
 					public void onResponse(Call<TreeListResponse> call, Response<TreeListResponse> response) {
-						if (mContextReference.get() == null) {
+						if (mContextReference.get() == null || !isAdded()) {
 							return;
 						}
 
@@ -117,38 +118,43 @@ public class TreeFragment extends BaseFragment {
 	}
 
 	private void init() {
-		FragmentManager fm = getFragmentManager();
-		LatLng mLatLng = new LatLng(mTree.getLat(), mTree.getLng());
+		FragmentManager fragmentManager = getFragmentManager();
+		if (fragmentManager != null) {
+			LatLng mLatLng = new LatLng(mTree.getLat(), mTree.getLng());
 
-		CameraPosition cp = new CameraPosition.Builder()
-				.target(mLatLng)
-				.zoom(15f)
-				.build();
-		SupportMapFragment fragment = SupportMapFragment.newInstance(new GoogleMapOptions().camera(cp));
-		fm.beginTransaction().replace(R.id.mapFragment, fragment).commit();
+			CameraPosition cp = new CameraPosition.Builder()
+					.target(mLatLng)
+					.zoom(15f)
+					.build();
+			SupportMapFragment fragment = SupportMapFragment.newInstance(new GoogleMapOptions().camera(cp));
 
-		fragment.getMapAsync(new OnMapReadyCallback() {
-			@Override
-			public void onMapReady(GoogleMap googleMap) {
-				LatLng mLatLng = new LatLng(mTree.getLat(), mTree.getLng());
-				googleMap.addMarker(new MarkerOptions()
-						.position(mLatLng)
-						.title(mTree.getName())
-						.snippet(mTree.getAddress())
-				);
+			fragmentManager.beginTransaction().replace(R.id.mapFragment, fragment).commit();
+
+			fragment.getMapAsync(new OnMapReadyCallback() {
+				@Override
+				public void onMapReady(GoogleMap googleMap) {
+					LatLng mLatLng = new LatLng(mTree.getLat(), mTree.getLng());
+					googleMap.addMarker(new MarkerOptions()
+							.position(mLatLng)
+							.title(mTree.getName())
+							.snippet(mTree.getAddress())
+					);
 
 //				googleMap.getUiSettings().setScrollGesturesEnabled(false);
-			}
-		});
+				}
+			});
+		}
 
-		List<InfoItem> list = new ArrayList<>();
+		List<TreeInfoItem> list = new ArrayList<>();
 		String[] stringArray = getResources().getStringArray(R.array.tree_info_array);
 
 		for (int i = 0, size = stringArray.length; i < size; i++) {
-			list.add(new InfoItem(stringArray[i], getData(i)));
+			list.add(new TreeInfoItem(stringArray[i], getData(i)));
 		}
 
-		recyclerView.setAdapter(new InfoItemAdapter(list, "horizontal"));
+		TreeInfoItemAdapter adapter = new TreeInfoItemAdapter();
+		adapter.setData(list, "horizontal");
+		recyclerView.setAdapter(adapter);
 	}
 
 	private String getData(int j) {
@@ -186,7 +192,7 @@ public class TreeFragment extends BaseFragment {
 	void onClickReport() {
 		String meta = "Android Version: " + Build.VERSION.RELEASE + "\n";
 		meta += "SDK Level: " + Build.VERSION.SDK_INT + "\n";
-		meta += "Version: " + C.getCurrentVersionName(mContext) + "\n";
+		meta += "Version: " + AppUtils.getAppVersionName() + "\n";
 		meta += "Brand: " + Build.BRAND + "\n";
 		meta += "Model: " + Build.MODEL + "\n";
 		meta += "Tree: " + mTree.toString() + "\n\n\n";

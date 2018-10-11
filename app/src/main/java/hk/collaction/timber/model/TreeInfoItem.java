@@ -4,14 +4,14 @@ package hk.collaction.timber.model;
  * Created by himphen on 24/5/16.
  */
 
-public class InfoItem {
+public class TreeInfoItem {
 	private String titleText;
 	private String contentText;
 
-	public InfoItem() {
+	public TreeInfoItem() {
 	}
 
-	public InfoItem(String titleText, String contentText) {
+	public TreeInfoItem(String titleText, String contentText) {
 		this.titleText = titleText;
 		this.contentText = contentText;
 	}
