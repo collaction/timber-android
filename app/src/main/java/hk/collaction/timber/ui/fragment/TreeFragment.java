@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -184,24 +183,28 @@ public class TreeFragment extends BaseFragment {
 
 	@OnClick(R.id.directionButton)
 	void onClickDirection() {
-		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr=" + mTree.getLat() + "," + mTree.getLng()));
-		startActivity(intent);
+		if (mTree != null) {
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr=" + mTree.getLat() + "," + mTree.getLng()));
+			startActivity(intent);
+		}
 	}
 
 	@OnClick(R.id.reportButton)
 	void onClickReport() {
-		String meta = "Android Version: " + Build.VERSION.RELEASE + "\n";
-		meta += "SDK Level: " + Build.VERSION.SDK_INT + "\n";
-		meta += "Version: " + AppUtils.getAppVersionName() + "\n";
-		meta += "Brand: " + Build.BRAND + "\n";
-		meta += "Model: " + Build.MODEL + "\n";
-		meta += "Tree: " + mTree.toString() + "\n\n\n";
+		if (mTree != null) {
+			String meta = "Android Version: " + Build.VERSION.RELEASE + "\n";
+			meta += "SDK Level: " + Build.VERSION.SDK_INT + "\n";
+			meta += "Version: " + AppUtils.getAppVersionName() + "\n";
+			meta += "Brand: " + Build.BRAND + "\n";
+			meta += "Model: " + Build.MODEL + "\n";
+			meta += "Tree: " + mTree.toString() + "\n\n\n";
 
-		Intent intent = new Intent(Intent.ACTION_SENDTO);
-		intent.setData(Uri.parse("mailto:"));
-		intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"team@collaction.hk"});
-		intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.pref_report_title));
-		intent.putExtra(Intent.EXTRA_TEXT, meta);
-		startActivity(Intent.createChooser(intent, getString(R.string.pref_report_title)));
+			Intent intent = new Intent(Intent.ACTION_SENDTO);
+			intent.setData(Uri.parse("mailto:"));
+			intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"team@collaction.hk"});
+			intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.pref_report_title));
+			intent.putExtra(Intent.EXTRA_TEXT, meta);
+			startActivity(Intent.createChooser(intent, getString(R.string.pref_report_title)));
+		}
 	}
 }
