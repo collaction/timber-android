@@ -1,108 +1,151 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: "kotlin-kapt"
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
+
     defaultConfig {
         applicationId "hk.collaction.timber"
-        minSdkVersion 17
-        targetSdkVersion 28
-        versionCode 161412 // 0 = alpha, 1 = beta, 2 = release
-        versionName "Ficus Microcarpa 141"
-        multiDexEnabled true
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 211502 // 0 = alpha, 1 = beta, 2 = release
+        versionName "Ficus Microcarpa 150"
         resConfigs "en", "zh"
+        flavorDimensions "default"
     }
+
     buildTypes {
         debug {
             debuggable true
             minifyEnabled false
             shrinkResources false
-            useProguard false
-            resValue "string", "GOOGLE_API_KEY", "\"" + getSecretKey("GOOGLE_API_KEY") + "\""
-            buildConfigField "String", "API_BASE_URL", "\"" + getSecretKey("API_BASE_URL_DEV") + "\""
         }
         release {
             debuggable false
             minifyEnabled true
             shrinkResources true
-            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", "GOOGLE_API_KEY", "\"" + getSecretKey("GOOGLE_API_KEY") + "\""
-            buildConfigField "String", "API_BASE_URL", "\"" + getSecretKey("API_BASE_URL_RELEASE") + "\""
+        }
+    }
+
+    productFlavors {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('secrets.properties').newDataInputStream())
+
+        dev {
+            resValue "string", "GOOGLE_API_KEY", properties.getProperty("key.google_api_key")
+            buildConfigField "String", "API_BASE_URL", properties.getProperty("key.api_base_url_dev")
+            buildConfigField "String", "CONTACT_EMAIL", properties.getProperty("key.contact_email")
+        }
+        prd {
+            resValue "string", "GOOGLE_API_KEY", properties.getProperty("key.google_api_key")
+            buildConfigField "String", "API_BASE_URL", properties.getProperty("key.api_base_url_release")
+            buildConfigField "String", "CONTACT_EMAIL", properties.getProperty("key.contact_email")
         }
     }
 
     dexOptions {
         javaMaxHeapSize "4g"
     }
-}
 
-static def getSecretKey(name) {
-    Properties props = new Properties()
-    File f = new File('./../Key/timber.secrets.properties')
-    if (f.exists()) {
-        props.load(new FileInputStream(f))
-        return props[name]
-    } else {
-        return name
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
 
-repositories {
-    mavenCentral()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    maven { url "https://jitpack.io" }
-}
-
 dependencies {
+    // Jetbrains
+    implementation 'org.jetbrains:annotations:19.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
 
     // Google Android Support
-    implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-v13:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:preference-v14:28.0.0'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'com.google.android.material:material:1.2.1'
 
-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
-    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    // Google Play Services
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.firebase:firebase-core:17.5.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
 
-    // Placeholder View
-    implementation 'com.mindorks:placeholderview:0.7.1'
+    // https://developer.android.com/jetpack/androidx/releases/lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
-    // RxBinding Butter Knife
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    // https://github.com/InsertKoinIO/koin
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation "org.koin:koin-androidx-ext:$koin_version"
 
-    // Material Dialog
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-
-    // Glide
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    // https://github.com/Kotlin/anko
+    implementation "org.jetbrains.anko:anko:0.10.8"
 
     // GSON
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    // Retrofit and okhttp
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.8.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.1'
 
-    // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.google.firebase:firebase-perf:16.2.4'
+    // https://github.com/ReactiveX/RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
 
-    // Crashlytics
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    // https://github.com/ReactiveX/RxKotlin
+    implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
+
+    // Placeholder View
+    implementation 'com.mindorks.android:placeholderview:1.0.3'
+    kapt 'com.mindorks.android:placeholderview-compiler:1.0.3'
+
+    // https://github.com/afollestad/material-dialogs
+    implementation 'com.afollestad.material-dialogs:core:3.1.1'
+
+    // https://github.com/bumptech/glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+
+    // https://github.com/square/retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    // https://github.com/square/okhttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // https://github.com/ReactiveX/RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+
+    // https://github.com/ReactiveX/RxKotlin
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+
+    // https://github.com/orhanobut/logger
+    implementation 'com.orhanobut:logger:2.2.0'
 
     // https://github.com/Blankj/AndroidUtilCode
-    implementation 'com.blankj:utilcode:1.23.7'
-
-    // https://github.com/akexorcist/Android-LocalizationActivity
-    implementation 'com.akexorcist:localizationactivity:1.2.2'
+    implementation 'com.blankj:utilcode:1.29.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'

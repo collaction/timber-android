@@ -11,20 +11,15 @@
 -dontwarn retrofit2.Platform$Java8
 
 # Crashlytics
--keepattributes *Annotation*
--keepattributes SourceFile,LineNumberTable
--keep public class * extends java.lang.Exception
+-keepattributes SourceFile,LineNumberTable        # Keep file names and line numbers.
+-keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
+-keep class com.google.firebase.crashlytics.** { *; }
+-dontwarn com.google.firebase.crashlytics.**
 
 # UCrop
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
-
-# PlaceHolderView
--keepattributes *Annotation*
--keepclassmembers class ** {
-    @com.mindorks.placeholderview.annotations.** <methods>;
-}
 
 # CarouselView
 -keep class com.synnapps.carouselview.** { *; }
