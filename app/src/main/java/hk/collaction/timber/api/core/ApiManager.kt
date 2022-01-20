@@ -4,13 +4,11 @@ import android.content.Context
 import com.google.gson.Gson
 import hk.collaction.timber.BuildConfig
 import hk.collaction.timber.api.service.ApiService
-import io.reactivex.schedulers.Schedulers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -30,7 +28,10 @@ class ApiManager(val context: Context) {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("User-Agent", "android")
                 .addHeader("app", BuildConfig.APPLICATION_ID)
-                .addHeader("app-build-version", BuildConfig.VERSION_NAME + "." + BuildConfig.VERSION_CODE)
+                .addHeader(
+                    "app-build-version",
+                    BuildConfig.VERSION_NAME + "." + BuildConfig.VERSION_CODE
+                )
             return chain.proceed(builder.build())
         }
     }
@@ -51,7 +52,6 @@ class ApiManager(val context: Context) {
             .baseUrl(BuildConfig.API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ApiConverterFactory(Gson()))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .client(client)
             .build()
         apiService = retrofit.create(ApiService::class.java)

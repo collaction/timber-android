@@ -10,11 +10,11 @@ import android.os.Build
 import android.util.DisplayMetrics
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hk.collaction.timber.BuildConfig
 import hk.collaction.timber.R
-import java.util.*
+import java.util.Locale
 
 /**
  * UtilHelper Class
@@ -99,15 +99,18 @@ object Utils {
             errorMessage = context.getString(R.string.ui_fatal_error)
         }
 
-        MaterialDialog(context)
-            .title(R.string.ui_sorry)
-            .message(text = errorMessage)
-            .positiveButton(R.string.ui_okay)
-            .negativeButton(R.string.ui_report) { dialog: MaterialDialog ->
-                val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://m.me/snappyscheme"))
-                dialog.context.startActivity(i)
-            }
-            .show()
+        context?.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(R.string.ui_sorry)
+                .setMessage(errorMessage)
+                .setPositiveButton(R.string.ui_okay, null)
+                .setNegativeButton(R.string.ui_report) { _, index: Int ->
+                    val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://m.me/snappyscheme"))
+                    context.startActivity(i)
+                }
+                .setCancelable(false)
+                .show()
+        }
     }
 
     fun logException(e: Exception) {

@@ -1,21 +1,23 @@
 package hk.collaction.timber.ui.base
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 import hk.collaction.timber.R
+import hk.collaction.timber.databinding.ActivityContainerBinding
 import hk.collaction.timber.utils.Utils.updateLanguage
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.toolbar.*
 
-abstract class BaseActivity : AppCompatActivity() {
-    open var containerView = R.layout.activity_container
+abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
+    lateinit var viewBinding: T
 
-    var disposables = CompositeDisposable()
+    abstract fun getActivityViewBinding(): T
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(updateLanguage(newBase))
@@ -23,17 +25,25 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initEvent()
+        viewBinding = getActivityViewBinding()
+        setContentView(viewBinding.root)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    fun initFragment(fragment: Fragment?, titleString: String?, titleId: Int?) {
+        if (fragment == null) return
+
+        val viewBinding = viewBinding
+        setContentView(viewBinding.root)
+        if (viewBinding is ActivityContainerBinding) {
+            initActionBar(
+                viewBinding.toolbar.root,
+                titleString = titleString, titleId = titleId
+            )
         }
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .commit()
     }
 
     protected fun initActionBar(
@@ -62,21 +72,29 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun initFragment(fragment: Fragment?, titleString: String?, titleId: Int?) {
-        fragment?.let {
-            setContentView(containerView)
-            initActionBar(toolbar, titleString = titleString, titleId = titleId)
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit()
+    fun popBackStack(): Boolean {
+        return if (supportFragmentManager.backStackEntryCount == 0) {
+            false
+        } else {
+            supportFragmentManager.popBackStack()
+            true
         }
     }
 
-    open fun initEvent() {}
+    fun hideSoftKeyboard() {
+        (getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager)?.hideSoftInputFromWindow(
+            currentFocus?.windowToken,
+            0
+        )
+    }
 
-    override fun onDestroy() {
-        disposables.dispose()
-        super.onDestroy()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

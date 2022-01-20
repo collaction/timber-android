@@ -1,14 +1,9 @@
 package hk.collaction.timber.ui.tree
 
-import android.content.Context
-import android.content.Intent
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
+import coil.load
 import com.mindorks.placeholderview.annotations.Click
 import com.mindorks.placeholderview.annotations.Layout
 import com.mindorks.placeholderview.annotations.Position
@@ -18,7 +13,6 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeIn
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut
 import hk.collaction.timber.R
 import hk.collaction.timber.api.model.Tree
-import hk.collaction.timber.utils.Utils.ARG_TREE_ID
 import java.util.Random
 
 /**
@@ -26,7 +20,6 @@ import java.util.Random
  */
 @Layout(R.layout.tree_card_view)
 class TreeCard(
-    private val context: Context,
     private val tree: Tree,
     private val callback: Callback
 ) {
@@ -45,15 +38,12 @@ class TreeCard(
 
     @Resolve
     fun onResolved() {
-        Glide.with(context)
-            .load(tree.photoPath!!.original)
-            .apply(
-                RequestOptions()
-                    .placeholder(placeholderImageId)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-            )
-            .transition(DrawableTransitionOptions.withCrossFade())
-            .into(profileImageView)
+        profileImageView.load(tree.photoPath!!.original) {
+            placeholder(placeholderImageId)
+            crossfade(true)
+            crossfade(500)
+        }
+
         nameAgeTxt.text = tree.name
         infoLayout.setOnClickListener {
         }
@@ -61,9 +51,9 @@ class TreeCard(
 
     @Click(R.id.infoLayout)
     fun onClick() {
-        val intent = Intent(context, TreeActivity::class.java)
-        intent.putExtra(ARG_TREE_ID, tree.id)
-        context.startActivity(intent)
+        tree.id?.let { treeId ->
+            callback.onClick(treeId)
+        }
     }
 
     private val placeholderImageId: Int
@@ -88,5 +78,6 @@ class TreeCard(
     interface Callback {
         fun onSwipeOut()
         fun onSwipeIn(treeId: String)
+        fun onClick(treeId: String)
     }
 }

@@ -14,7 +14,7 @@ class ApiConverterFactory(private val gson: Gson) : Converter.Factory() {
         parameterAnnotations: Array<Annotation>,
         methodAnnotations: Array<Annotation>,
         retrofit: Retrofit
-    ): Converter<*, RequestBody>? {
+    ): Converter<*, RequestBody> {
         val adapter = gson.getAdapter(TypeToken.get(type))
         return RequestConverter(gson, adapter)
     }

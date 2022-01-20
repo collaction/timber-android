@@ -1,7 +1,7 @@
 package hk.collaction.timber.api.request
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /**
  * Created by Himphen on 23/8/2017.

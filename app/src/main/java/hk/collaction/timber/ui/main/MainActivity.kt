@@ -1,17 +1,19 @@
 package hk.collaction.timber.ui.main
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import hk.collaction.timber.R
-import hk.collaction.timber.ui.base.BaseActivity
-import kotlinx.android.synthetic.main.toolbar.*
+import hk.collaction.timber.databinding.ActivityContainerBinding
+import hk.collaction.timber.ui.base.BaseFragmentActivity
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseFragmentActivity<ActivityContainerBinding>() {
+    override fun getActivityViewBinding() = ActivityContainerBinding.inflate(layoutInflater)
+
+    override var fragment: Fragment? = MainFragment()
+    override var titleId: Int? = R.string.app_name
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_container)
-        setSupportActionBar(toolbar)
-        initActionBar(toolbar, titleId = R.string.app_name)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setHomeButtonEnabled(false)
 

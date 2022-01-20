@@ -4,10 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.blankj.utilcode.util.AppUtils
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
@@ -15,22 +16,24 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import hk.collaction.timber.R
 import hk.collaction.timber.api.model.Tree
+import hk.collaction.timber.databinding.FragmentTreeBinding
 import hk.collaction.timber.ui.base.BaseFragment
+import hk.collaction.timber.utils.GeneralUtils.getAppVersionName
+import hk.collaction.timber.utils.Utils.ARG_TREE_ID
 import hk.collaction.timber.utils.Utils.getCurrentLanguage
-import kotlinx.android.synthetic.main.fragment_tree.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Created by Himphen on 23/8/2017.
  */
-class TreeFragment : BaseFragment(R.layout.fragment_tree) {
+class TreeFragment : BaseFragment<FragmentTreeBinding>() {
 
     private val vm: TreeViewModel by viewModel()
     private var tree: Tree? = null
 
     init {
         lifecycleScope.launchWhenCreated {
-            vm.tree.observe(this@TreeFragment, {
+            vm.treeLiveData.observe(this@TreeFragment, {
                 tree = it
                 onGetTree()
             })
@@ -39,12 +42,14 @@ class TreeFragment : BaseFragment(R.layout.fragment_tree) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        directionButton.setOnClickListener { onClickDirection() }
-        reportButton.setOnClickListener { onClickReport() }
+        val viewBinding = viewBinding!!
 
-        rvlist.layoutManager = LinearLayoutManager(requireContext())
+        viewBinding.directionButton.setOnClickListener { onClickDirection() }
+        viewBinding.reportButton.setOnClickListener { onClickReport() }
 
-        arguments?.getString("treeId")?.let { treeId ->
+        viewBinding.rvlist.layoutManager = LinearLayoutManager(requireContext())
+
+        arguments?.getString(ARG_TREE_ID)?.let { treeId ->
             vm.getTree(getCurrentLanguage(requireContext()), treeId)
         }
     }
@@ -89,7 +94,7 @@ class TreeFragment : BaseFragment(R.layout.fragment_tree) {
         }
         val adapter = TreeInfoItemAdapter()
         adapter.setData(list, "horizontal")
-        rvlist?.adapter = adapter
+        viewBinding?.rvlist?.adapter = adapter
     }
 
     private fun getData(j: Int): String? {
@@ -122,7 +127,7 @@ class TreeFragment : BaseFragment(R.layout.fragment_tree) {
             var meta =
                 """Android Version: ${Build.VERSION.RELEASE}""".trimIndent()
             meta += """SDK Level: ${Build.VERSION.SDK_INT}""".trimIndent()
-            meta += """Version: ${AppUtils.getAppVersionName()}""".trimIndent()
+            meta += """Version: ${getAppVersionName(context)}""".trimIndent()
             meta += """Brand: ${Build.BRAND}""".trimIndent()
             meta += """Model: ${Build.MODEL}""".trimIndent()
             meta += """Tree: $tree""".trimIndent()
@@ -142,4 +147,10 @@ class TreeFragment : BaseFragment(R.layout.fragment_tree) {
             return fragment
         }
     }
+
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = FragmentTreeBinding.inflate(inflater, container, false)
 }

@@ -8,11 +8,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsSingleChoice
-import com.blankj.utilcode.util.AppUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import hk.collaction.timber.R
 import hk.collaction.timber.ui.base.BasePreferenceFragment
+import hk.collaction.timber.utils.GeneralUtils.getAppVersionName
 import hk.collaction.timber.utils.Utils.PREF_LANGUAGE
 import hk.collaction.timber.utils.Utils.PREF_LANGUAGE_COUNTRY
 
@@ -29,18 +28,12 @@ class SettingsFragment : BasePreferenceFragment() {
         super.onViewCreated(view, savedInstanceState)
         findPreference<Preference>("pref_language")!!.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                val language = preferences.getString(PREF_LANGUAGE, "")
-                val languageCountry = preferences.getString(PREF_LANGUAGE_COUNTRY, "")
-                var a = 0
-                if ("en" == language) {
-                    a = 1
-                } else if ("zh" == language) {
-                    a = 2
-                }
                 context?.let { context ->
-                    val dialog = MaterialDialog(context)
-                        .title(R.string.action_language)
-                        .listItemsSingleChoice(R.array.language_choose, initialSelection = a) { dialog: MaterialDialog, index: Int, text: CharSequence ->
+                    MaterialAlertDialogBuilder(context)
+                        .setTitle(R.string.action_language)
+                        .setItems(R.array.language_choose) { dialog, index ->
+                            dialog.dismiss()
+
                             val editor = preferences.edit()
                             when (index) {
                                 1 -> editor.putString(PREF_LANGUAGE, "en")
@@ -51,11 +44,19 @@ class SettingsFragment : BasePreferenceFragment() {
                                     .putString(PREF_LANGUAGE_COUNTRY, "")
                             }
                             editor.apply()
-                            startActivity(Intent(context, SettingsActivity::class.java))
-                            activity?.finish()
+
+                            val intent =
+                                context.packageManager?.getLaunchIntentForPackage(context.packageName)
+                            intent?.let {
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                intent.addCategory(Intent.CATEGORY_HOME)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                            }
                         }
-                        .negativeButton(R.string.ui_cancel)
-                    dialog.show()
+                        .setNegativeButton(R.string.ui_cancel, null)
+                        .show()
                 }
                 false
             }
@@ -70,7 +71,7 @@ class SettingsFragment : BasePreferenceFragment() {
 
                 """.trimIndent()
                 meta += """
-                Version: ${AppUtils.getAppVersionName()}
+                Version: ${getAppVersionName(context)}
 
                 """.trimIndent()
                 meta += """
@@ -123,7 +124,7 @@ class SettingsFragment : BasePreferenceFragment() {
                 false
             }
         findPreference<Preference>("pref_version")!!.title =
-            "Version " + AppUtils.getAppVersionName()
+            "Version " + getAppVersionName(context)
         findPreference<Preference>("pref_version")!!.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
                 val uri = Uri.parse("https://www.collaction.hk/s/timber")

@@ -2,10 +2,9 @@ package hk.collaction.timber.core
 
 import android.app.Application
 import android.os.Build
-import com.blankj.utilcode.util.Utils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.orhanobut.logger.AndroidLogAdapter
-import com.orhanobut.logger.Logger
+import com.himphen.logger.AndroidLogAdapter
+import com.himphen.logger.Logger
 import hk.collaction.timber.BuildConfig
 import hk.collaction.timber.api.core.ApiManager
 import hk.collaction.timber.api.data.DataRepository
@@ -33,8 +32,6 @@ class App : Application() {
                 return BuildConfig.DEBUG
             }
         })
-
-        Utils.init(this)
 
         // dependency injection
         initKoin()

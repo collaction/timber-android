@@ -33,3 +33,7 @@ fun Double.formatSignificant(significant: Int): String {
     val bigDecimal = BigDecimal(this, mathContext)
     return bigDecimal.toPlainString()
 }
+
+fun dpToPx(dp: Int): Int {
+    return (dp * Resources.getSystem().displayMetrics.density).roundToInt()
+}
