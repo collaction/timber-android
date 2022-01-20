@@ -1,11 +1,3 @@
-# Realm
--keep class io.realm.annotations.RealmModule
--keep @io.realm.annotations.RealmModule class *
--keep class io.realm.internal.Keep
--keep @io.realm.internal.Keep class * { *; }
--dontwarn javax.**
--dontwarn io.realm.**
-
 # RetroFit2
 -dontwarn okio.**
 -dontwarn retrofit2.Platform$Java8
@@ -16,10 +8,24 @@
 -keep class com.google.firebase.crashlytics.** { *; }
 -dontwarn com.google.firebase.crashlytics.**
 
-# UCrop
--dontwarn com.yalantis.ucrop**
--keep class com.yalantis.ucrop** { *; }
--keep interface com.yalantis.ucrop** { *; }
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.AnnotationsKt # core serialization annotations
 
-# CarouselView
--keep class com.synnapps.carouselview.** { *; }
+# kotlinx-serialization-json specific. Add this if you have java.lang.NoClassDefFoundError kotlinx.serialization.json.JsonObjectSerializer
+-keepclassmembers class kotlinx.serialization.json.** {
+    *** Companion;
+}
+-keepclasseswithmembers class kotlinx.serialization.json.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+-keep,includedescriptorclasses class hk.collaction.timber.api.**$$serializer { *; }
+-keepclassmembers class hk.collaction.timber.api.** {
+    *** Companion;
+}
+-keepclasseswithmembers class hk.collaction.timber.api.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+-keepattributes SourceFile,LineNumberTable        # Keep file names and line numbers.
+-keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.

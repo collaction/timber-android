@@ -16,8 +16,8 @@ android {
         applicationId "hk.collaction.timber"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 211702 // 0 = alpha, 1 = beta, 2 = release
-        versionName "Ficus Microcarpa 170"
+        versionCode 211712 // 0 = alpha, 1 = beta, 2 = release
+        versionName "Ficus Microcarpa 171"
         resConfigs "en", "zh"
         flavorDimensions "default"
     }
